@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_tarot">
+
+    <fragment
+        android:id="@+id/nav_tarot"
+        android:name="com.example.tarotreader.fragments.TarotGameFragment"
+        android:label="@string/menu_tarot"
+        tools:layout="@layout/fragment_tarot_game">
+
+        <action
+            android:id="@+id/action_tarot_to_details"
+            app:destination="@id/nav_tarot_details" />
+
+        <action
+            android:id="@+id/action_tarot_to_spread"
+            app:destination="@id/nav_tarot_spread" />
+
+        <action
+            android:id="@+id/action_tarot_to_all_cards"
+            app:destination="@id/nav_all_tarot_cards" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_horoscope"
+        android:name="com.example.tarotreader.ui.horoscope.HoroscopeFragment"
+        android:label="@string/menu_horoscope"
+        tools:layout="@layout/fragment_horoscope" />
+
+    <fragment
+        android:id="@+id/nav_tarot_details"
+        android:name="com.example.tarotreader.fragments.TarotDetailsFragment"
+        android:label="@string/tarot_detail_title"
+        tools:layout="@layout/fragment_tarot_card_details">
+        <argument
+            android:name="cardName"
+            app:argType="string" />
+        <argument
+            android:name="cardMeaning"
+            app:argType="string" />
+        <argument
+            android:name="cardImageRes"
+            app:argType="reference" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_tarot_spread"
+        android:name="com.example.tarotreader.fragments.TarotSpreadFragment"
+        android:label="@string/tarot_spread_title"
+        tools:layout="@layout/fragment_tarot_spread">
+        <argument
+            android:name="spreadTitle"
+            app:argType="string" />
+        <argument
+            android:name="spreadHeadline"
+            app:argType="string" />
+        <argument
+            android:name="spreadDetermination"
+            app:argType="string" />
+        <argument
+            android:name="spreadSource"
+            app:argType="string" />
+        <argument
+            android:name="cardPositions"
+            app:argType="string[]" />
+        <argument
+            android:name="cardTitles"
+            app:argType="string[]" />
+        <argument
+            android:name="cardMeanings"
+            app:argType="string[]" />
+        <argument
+            android:name="cardImages"
+            app:argType="integer[]" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_all_tarot_cards"
+        android:name="com.example.tarotreader.fragments.AllTarotCardsFragment"
+        android:label="@string/all_cards_title"
+        tools:layout="@layout/fragment_all_tarot_cards" />
+</navigation>
