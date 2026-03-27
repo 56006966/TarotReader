@@ -47,8 +47,8 @@ class LaunchTarotTileWallView @JvmOverloads constructor(
             LayoutParams.WRAP_CONTENT,
             Gravity.CENTER
         )
-        perspectiveStage.rotationX = 58f
-        perspectiveStage.translationY = (-56).dp().toFloat()
+        perspectiveStage.rotationX = 15f
+        perspectiveStage.translationY = (-12).dp().toFloat()
         perspectiveStage.clipChildren = false
         perspectiveStage.clipToPadding = false
 
@@ -176,7 +176,7 @@ class LaunchTarotTileWallView @JvmOverloads constructor(
             layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
             setImageResource(imageRes)
             scaleType = ImageView.ScaleType.FIT_CENTER
-            setBackgroundColor(context.getColor(android.R.color.white))
+            setBackgroundColor(context.getColor(R.color.tarot_card_inner_surface))
             setPadding(8.dp(), 8.dp(), 8.dp(), 8.dp())
             alpha = 0.96f
         }

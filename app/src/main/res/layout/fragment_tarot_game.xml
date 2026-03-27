@@ -9,6 +9,7 @@
         android:id="@+id/tarotHeading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
         android:textAppearance="?attr/textAppearanceHeadline5"
         android:textStyle="bold" />
 
@@ -18,12 +19,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:alpha="0.85"
+        android:textColor="@android:color/white"
         android:textAppearance="?attr/textAppearanceBody1" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:textColor="@android:color/white"
         android:text="@string/spread_label"
         android:textAppearance="?attr/textAppearanceSubtitle1"
         android:textStyle="bold" />
@@ -32,13 +35,16 @@
         android:id="@+id/spreadSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp" />
+        android:layout_marginTop="8dp"
+        android:background="@drawable/spinner_field_background"
+        android:popupBackground="@drawable/spinner_popup_background" />
 
     <TextView
         android:id="@+id/spreadDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        android:textColor="@android:color/white"
         android:textAppearance="?attr/textAppearanceBody2" />
 
     <TextView
@@ -46,20 +52,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
+        android:textColor="@android:color/white"
         android:textAppearance="?attr/textAppearanceCaption" />
 
     <Button
         android:id="@+id/btnDrawCard"
-        android:layout_width="match_parent"
+        android:layout_width="180dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp"
+        android:backgroundTint="@android:color/black"
+        android:textColor="@android:color/white"
         android:text="@string/draw_spread" />
 
     <Button
         android:id="@+id/btnAllCards"
-        android:layout_width="match_parent"
+        android:layout_width="180dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp"
+        android:backgroundTint="@android:color/black"
+        android:textColor="@android:color/white"
         android:text="@string/view_all_cards" />
 
     <TextView
@@ -68,6 +81,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="@string/spread_cards_hint"
+        android:textColor="@android:color/white"
         android:textAppearance="?attr/textAppearanceBody2" />
 </LinearLayout>
 

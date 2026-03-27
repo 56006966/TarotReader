@@ -21,8 +21,14 @@ data class TarotSpreadMeaningItem(
 class TarotSpreadMeaningAdapter(
     private val items: List<TarotSpreadMeaningItem>,
     private val revealState: TarotSpreadRevealState,
+    private val determination: String,
     private val onAllCardsRevealed: (() -> Unit)? = null
-) : RecyclerView.Adapter<TarotSpreadMeaningAdapter.SpreadMeaningViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    companion object {
+        private const val VIEW_TYPE_CARD = 0
+        private const val VIEW_TYPE_RESULT = 1
+    }
 
     inner class SpreadMeaningViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val positionView: TextView = view.findViewById(R.id.spreadItemPosition)
@@ -31,13 +37,29 @@ class TarotSpreadMeaningAdapter(
         val meaningView: TextView = view.findViewById(R.id.spreadItemMeaning)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SpreadMeaningViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_tarot_spread_meaning, parent, false)
-        return SpreadMeaningViewHolder(view)
+    inner class SpreadResultViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val resultBody: TextView = view.findViewById(R.id.spreadResultBody)
     }
 
-    override fun onBindViewHolder(holder: SpreadMeaningViewHolder, position: Int) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        return if (viewType == VIEW_TYPE_RESULT) {
+            SpreadResultViewHolder(
+                inflater.inflate(R.layout.item_tarot_spread_result, parent, false)
+            )
+        } else {
+            SpreadMeaningViewHolder(
+                inflater.inflate(R.layout.item_tarot_spread_meaning, parent, false)
+            )
+        }
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is SpreadResultViewHolder) {
+            bindResult(holder)
+            return
+        }
+        holder as SpreadMeaningViewHolder
         val item = items[position]
         holder.positionView.text = item.position
         holder.titleView.text = item.title
@@ -64,11 +86,22 @@ class TarotSpreadMeaningAdapter(
                 holder.titleView.animate().alpha(1f).setDuration(220).start()
                 holder.meaningView.animate().alpha(1f).setDuration(260).start()
                 if (revealState.allRevealed()) {
+                    notifyItemChanged(items.size)
                     onAllCardsRevealed?.invoke()
                 }
             }
         }
     }
 
-    override fun getItemCount(): Int = items.size
+    override fun getItemViewType(position: Int): Int {
+        return if (position == items.size) VIEW_TYPE_RESULT else VIEW_TYPE_CARD
+    }
+
+    override fun getItemCount(): Int = items.size + 1
+
+    private fun bindResult(holder: SpreadResultViewHolder) {
+        holder.resultBody.text = determination
+        holder.itemView.alpha = if (revealState.allRevealed()) 1f else 0f
+        holder.itemView.visibility = if (revealState.allRevealed()) View.VISIBLE else View.GONE
+    }
 }

@@ -23,16 +23,12 @@ class TarotSpreadFragment : Fragment(R.layout.fragment_tarot_spread) {
 
         view.findViewById<TextView>(R.id.spreadTitle).text = args.spreadTitle
         view.findViewById<TextView>(R.id.spreadHeadline).text = args.spreadHeadline
-        val determinationView = view.findViewById<TextView>(R.id.spreadDetermination)
-        determinationView.text = args.spreadDetermination
         val restoredState = savedInstanceState?.getBooleanArray(KEY_REVEAL_STATE)
         revealState = if (restoredState != null) {
             TarotSpreadRevealState.fromBooleanArray(restoredState)
         } else {
             TarotSpreadRevealState(args.cardPositions.size)
         }
-        determinationView.alpha = if (revealState.allRevealed()) 1f else 0f
-        determinationView.visibility = if (revealState.allRevealed()) View.VISIBLE else View.INVISIBLE
         view.findViewById<TextView>(R.id.spreadSource).visibility = View.GONE
 
         val items = args.cardPositions.indices.map { index ->
@@ -50,10 +46,11 @@ class TarotSpreadFragment : Fragment(R.layout.fragment_tarot_spread) {
         recyclerView.adapter = TarotSpreadMeaningAdapter(
             items = items,
             revealState = revealState
+            ,
+            determination = args.spreadDetermination
         ) {
-            if (!determinationView.isShown) {
-                determinationView.visibility = View.VISIBLE
-                determinationView.animate().alpha(1f).setDuration(320).start()
+            recyclerView.post {
+                recyclerView.smoothScrollToPosition(items.size)
             }
         }
     }

@@ -4,11 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardBackgroundColor="@color/tarot_card_surface"
+    app:cardBackgroundColor="@color/spread_card_surface"
     app:cardCornerRadius="@dimen/tarot_card_corner_radius"
     app:cardElevation="@dimen/tarot_card_elevation"
     app:cardUseCompatPadding="true"
-    app:strokeColor="@color/tarot_card_stroke"
+    app:strokeColor="@color/spread_card_stroke"
     app:strokeWidth="1dp">
 
     <LinearLayout
@@ -28,7 +28,7 @@
                 android:id="@+id/spreadItemImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@android:color/white"
+                android:background="@color/spread_card_inner_surface"
                 android:padding="6dp"
                 android:scaleType="fitCenter" />
         </com.google.android.material.card.MaterialCardView>
@@ -44,6 +44,7 @@
                 android:id="@+id/spreadItemPosition"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
                 android:textAppearance="?attr/textAppearanceCaption"
                 android:textStyle="bold" />
 
@@ -52,6 +53,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
+                android:textColor="@android:color/white"
                 android:textAppearance="?attr/textAppearanceSubtitle2"
                 android:textStyle="bold" />
 
@@ -61,6 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:lineSpacingExtra="3dp"
+                android:textColor="@android:color/white"
                 android:textAppearance="?attr/textAppearanceBody2" />
         </LinearLayout>
     </LinearLayout>

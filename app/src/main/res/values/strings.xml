@@ -16,6 +16,7 @@
     <string name="draw_spread">Draw Spread</string>
     <string name="spread_cards">Your spread</string>
     <string name="spread_cards_hint">Your full spread will open on the next screen with each card\'s position, orientation, and meaning.</string>
+    <string name="spread_result_label">Spread Result</string>
     <string name="spread_source_offline">Offline spread with built-in meanings</string>
     <string name="spread_source_tarotap_ready">Offline spread for now. Tarotap key detected and ready for live hookup.</string>
     <string name="view_all_cards">View All Cards</string>

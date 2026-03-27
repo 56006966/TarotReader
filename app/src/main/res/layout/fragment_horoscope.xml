@@ -14,6 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/horoscope_heading"
+            android:textColor="@android:color/white"
             android:textAppearance="?attr/textAppearanceHeadline5"
             android:textStyle="bold" />
 
@@ -23,6 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/horoscope_subheading"
+            android:textColor="@android:color/white"
             android:textAppearance="?attr/textAppearanceBody1" />
 
         <TextView
@@ -30,6 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="@string/horoscope_sign_prompt"
+            android:textColor="@android:color/white"
             android:textAppearance="?attr/textAppearanceSubtitle1"
             android:textStyle="bold" />
 
@@ -37,13 +40,16 @@
             android:id="@+id/signSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp"
+            android:background="@drawable/spinner_field_background"
+            android:popupBackground="@drawable/spinner_popup_background" />
 
         <TextView
             android:id="@+id/horoscopeDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:textColor="@android:color/white"
             android:textAppearance="?attr/textAppearanceCaption" />
 
         <TextView
@@ -51,6 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="@string/horoscope_overview_title"
+            android:textColor="@android:color/white"
             android:textAppearance="?attr/textAppearanceSubtitle1"
             android:textStyle="bold" />
 
@@ -59,6 +66,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
+            android:textColor="@android:color/white"
             android:lineSpacingExtra="3dp" />
 
         <TextView
@@ -66,6 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
             android:text="@string/horoscope_love_title"
+            android:textColor="@android:color/white"
             android:textAppearance="?attr/textAppearanceSubtitle1"
             android:textStyle="bold" />
 
@@ -74,6 +83,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
+            android:textColor="@android:color/white"
             android:lineSpacingExtra="3dp" />
 
         <TextView
@@ -81,6 +91,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
             android:text="@string/horoscope_career_title"
+            android:textColor="@android:color/white"
             android:textAppearance="?attr/textAppearanceSubtitle1"
             android:textStyle="bold" />
 
@@ -89,6 +100,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
+            android:textColor="@android:color/white"
             android:lineSpacingExtra="3dp" />
 
         <TextView
@@ -96,6 +108,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
             android:text="@string/horoscope_energy_title"
+            android:textColor="@android:color/white"
             android:textAppearance="?attr/textAppearanceSubtitle1"
             android:textStyle="bold" />
 
@@ -104,6 +117,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
+            android:textColor="@android:color/white"
             android:lineSpacingExtra="3dp" />
 
         <TextView
@@ -111,6 +125,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
             android:text="@string/horoscope_lucky_title"
+            android:textColor="@android:color/white"
             android:textAppearance="?attr/textAppearanceSubtitle1"
             android:textStyle="bold" />
 
@@ -120,6 +135,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:layout_marginBottom="20dp"
+            android:textColor="@android:color/white"
             android:lineSpacingExtra="3dp" />
     </LinearLayout>
 </ScrollView>

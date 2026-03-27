@@ -29,10 +29,10 @@ class TarotGameFragment : Fragment(R.layout.fragment_tarot_game) {
 
         spreadSpinner.adapter = ArrayAdapter(
             requireContext(),
-            android.R.layout.simple_spinner_item,
+            R.layout.item_spinner_selected,
             TarotSpread.entries.map { it.displayName }
         ).apply {
-            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            setDropDownViewResource(R.layout.item_spinner_dropdown)
         }
         spreadSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
