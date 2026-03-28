@@ -370,27 +370,27 @@ function getCardMeanings(name) {
 
   const [rank, suit] = name.split(" of ");
   const suitTheme = {
-    Wands: "energy, desire, and momentum",
-    Cups: "emotion, intuition, and connection",
-    Swords: "clarity, tension, and truth",
-    Pentacles: "work, resources, and steady growth",
-  }[suit] || "change and growth";
+    Wands: "creative fire, desire, and momentum",
+    Cups: "emotion, intuition, and relationship currents",
+    Swords: "thought, tension, and truth",
+    Pentacles: "material life, resources, and steady growth",
+  }[suit] || "the lesson moving through the Minor Arcana";
 
   const uprightLead = {
-    Ace: `A new opening appears in ${suitTheme}.`,
-    Two: `A balancing act is taking shape in ${suitTheme}.`,
-    Three: `Growth, exchange, or momentum is building in ${suitTheme}.`,
-    Four: `Stability and pause matter more than speed in ${suitTheme}.`,
-    Five: `Conflict or strain is exposing what needs adjustment in ${suitTheme}.`,
-    Six: `Movement, support, or harmony is returning to ${suitTheme}.`,
-    Seven: `Assessment and conviction are being tested in ${suitTheme}.`,
-    Eight: `Momentum or pressure is accelerating in ${suitTheme}.`,
-    Nine: `The situation is maturing, and its true weight is visible in ${suitTheme}.`,
-    Ten: `A cycle is reaching completion in ${suitTheme}.`,
-    Page: `Curiosity and a new lesson are arriving through ${suitTheme}.`,
-    Knight: `Strong motion and pursuit are pushing ${suitTheme} forward.`,
-    Queen: `The mature, embodied side of ${suitTheme} is your advantage now.`,
-    King: `Mastery, leadership, and responsibility define this moment in ${suitTheme}.`,
+    Ace: `A fresh Minor Arcana opening appears in ${suitTheme}.`,
+    Two: `A balancing act is taking shape within the ${suit} current of ${suitTheme}.`,
+    Three: `Growth, exchange, or momentum is building through the ${suit} current of ${suitTheme}.`,
+    Four: `Stability and pause matter more than speed in this ${suit} lesson.`,
+    Five: `Conflict or strain is exposing what needs adjustment in the ${suit} realm.`,
+    Six: `Movement, support, or harmony is returning to the ${suit} current.`,
+    Seven: `Assessment and conviction are being tested in the ${suit} current.`,
+    Eight: `Momentum or pressure is accelerating through the ${suit} lesson.`,
+    Nine: `The situation is maturing, and its true weight is visible in the ${suit} current.`,
+    Ten: `A full Minor Arcana cycle is reaching completion through the ${suit} suit.`,
+    Page: `A new message or early lesson arrives through the ${suit} suit.`,
+    Knight: `Strong motion and pursuit are pushing the ${suit} current forward.`,
+    Queen: `The inwardly mastered side of the ${suit} suit is your advantage now.`,
+    King: `Mature command and responsibility define this moment in the ${suit} suit.`,
   }[rank] || `${name} is asking for awareness, honesty, and a thoughtful next step.`;
 
   const reversedLead = {
@@ -411,7 +411,7 @@ function getCardMeanings(name) {
   }[rank] || `${name} reversed suggests the lesson is delayed or turned inward.`;
 
   return [
-    `${uprightLead} Let the lesson of the ${name} guide your next move with awareness.`,
+    `${uprightLead} Let the ${name} guide your next move with awareness.`,
     `${reversedLead} The reversed ${name} asks for reflection before action.`,
   ];
 }
@@ -432,19 +432,19 @@ function buildPatternSummary(reversedCount, majorCount, dominantSuit) {
   const parts = [];
 
   if (majorCount >= 2) {
-    parts.push("Major Arcana energy suggests this reading touches a bigger life lesson rather than a passing mood.");
+    parts.push("Strong Major Arcana presence suggests this reading touches a bigger soul-level lesson rather than a passing mood.");
   }
 
   if (reversedCount >= 2) {
-    parts.push("Multiple reversed cards suggest the situation is more internal, delayed, or emotionally tangled than it first appears.");
+    parts.push("Multiple reversed cards suggest the tarot is pointing to an inward, delayed, or emotionally tangled process rather than a simple external event.");
   }
 
   if (dominantSuit) {
     const suitThemes = {
-      Wands: "The pattern is action-heavy and asks for courage, pacing, and clean momentum.",
-      Cups: "The pattern is emotional and relational, so honesty and care matter more than force.",
-      Swords: "The pattern is mental and communicative, asking for clarity, boundaries, and truth.",
-      Pentacles: "The pattern is practical and grounded, asking for patience, consistency, and tangible follow-through.",
+      Wands: "The spread is dominated by Wands, so the reading leans toward will, passion, courage, and how your fire is being directed.",
+      Cups: "The spread is dominated by Cups, so the reading leans toward emotion, intimacy, intuition, and the heart's true current.",
+      Swords: "The spread is dominated by Swords, so the reading leans toward thought, language, boundaries, and what truth is cutting through.",
+      Pentacles: "The spread is dominated by Pentacles, so the reading leans toward stability, embodiment, work, money, and tangible follow-through.",
     };
     parts.push(suitThemes[dominantSuit]);
   }
@@ -490,7 +490,7 @@ function buildPairingSummary(cards, spreadId) {
   if (spreadId === "PAST_PRESENT_FUTURE" || spreadId === "LOVE" || spreadId === "CAREER") {
     const sameSuit = allSameSuit(cards);
     if (sameSuit) {
-      pairings.push(`All three cards lean into ${sameSuit}, making this spread unusually coherent and concentrated around one theme rather than divided priorities.`);
+      pairings.push(`All three cards fall within ${sameSuit}, making this spread unusually coherent and concentrated within a single Minor Arcana current rather than divided priorities.`);
     }
   }
 
