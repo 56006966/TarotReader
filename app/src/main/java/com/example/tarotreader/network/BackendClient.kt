@@ -74,7 +74,7 @@ object BackendClient {
             spreadTitle = response.optString("displayName", spread.displayName),
             spreadHeadline = response.optString("headline", spread.prompt),
             spreadDetermination = response.optString("determination", spread.prompt),
-            spreadSource = response.optString("source", "api.phunkypixels.com"),
+            spreadSource = response.optString("source", "tarotreader.phunkypixels.com"),
             cardPositions = positions,
             cardTitles = titles,
             cardMeanings = meanings,

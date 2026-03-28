@@ -32,7 +32,7 @@ android {
         buildConfigField(
             "String",
             "BACKEND_BASE_URL",
-            "\"${localProperties.getProperty("backend.baseUrl", "https://api.phunkypixels.com/")}\""
+            "\"${localProperties.getProperty("backend.baseUrl", "https://tarotreader.phunkypixels.com/")}\""
         )
     }
     buildTypes {

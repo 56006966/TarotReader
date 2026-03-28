@@ -3,6 +3,8 @@ const cors = require("cors");
 
 const app = express();
 const port = Number(process.env.PORT || 8080);
+const apiNinjasApiKey = process.env.API_NINJAS_API_KEY || "";
+const mysticalApiKey = process.env.MYSTICAL_API_KEY || "";
 
 app.use(cors({ origin: process.env.CORS_ORIGIN || "*" }));
 app.use(express.json());
@@ -128,20 +130,32 @@ const tarotDeck = [
 ];
 
 app.get("/health", (_req, res) => {
-  res.json({ ok: true, service: "tarotreader-backend" });
+  res.json({
+    ok: true,
+    service: "tarotreader-backend",
+    providers: {
+      horoscope: apiNinjasApiKey ? "api-ninjas" : "local-fallback",
+      tarot: mysticalApiKey ? "mystical-api" : "local-fallback",
+    },
+  });
 });
 
-app.get("/tarotreader/horoscope", (req, res) => {
+app.get("/tarotreader/horoscope", async (req, res) => {
   const sign = normalizeSign(String(req.query.sign || ""));
   if (!sign) {
     return res.status(400).json({ error: "A valid zodiac sign is required." });
+  }
+
+  const remoteReading = await fetchApiNinjasHoroscope(sign);
+  if (remoteReading) {
+    return res.json(remoteReading);
   }
 
   const daySeed = dayOfYear(new Date());
   const signSeed = horoscopeSigns.indexOf(sign);
   res.json({
     sign,
-    source: "phunkypixels-backend",
+    source: "local-fallback",
     overview: `${overviewOpeners[(daySeed + signSeed) % overviewOpeners.length]} ${sign}, stay present and let your next move be deliberate.`,
     love: loveMessages[(daySeed + signSeed * 2) % loveMessages.length],
     career: careerMessages[(daySeed + signSeed * 3) % careerMessages.length],
@@ -160,16 +174,21 @@ app.get("/tarotreader/tarot/cards", (_req, res) => {
 
 app.get("/tarotreader/tarot/spreads", (_req, res) => {
   res.json({
-    source: "phunkypixels-backend",
+    source: mysticalApiKey ? "mystical-api" : "local-fallback",
     spreads: Object.entries(tarotSpreads).map(([id, spread]) => ({ id, ...spread })),
   });
 });
 
-app.post("/tarotreader/tarot/spread", (req, res) => {
+app.post("/tarotreader/tarot/spread", async (req, res) => {
   const spreadId = String(req.body?.spread || "DAILY");
   const spread = tarotSpreads[spreadId];
   if (!spread) {
     return res.status(400).json({ error: "Unknown spread." });
+  }
+
+  const remoteReading = await fetchMysticalTarotReading(spreadId, spread);
+  if (remoteReading) {
+    return res.json(remoteReading);
   }
 
   const deck = shuffle([...tarotDeck]).slice(0, spread.cardCount);
@@ -188,7 +207,7 @@ app.post("/tarotreader/tarot/spread", (req, res) => {
     displayName: spread.displayName,
     headline: spread.prompt,
     determination: buildDetermination(spreadId, cards),
-    source: "phunkypixels-backend",
+    source: "local-fallback",
     cards,
   });
 });
@@ -247,4 +266,149 @@ function buildDetermination(spreadId, cards) {
   }
 
   return cards.map((card) => card.name).join(", ");
+}
+
+async function fetchApiNinjasHoroscope(sign) {
+  if (!apiNinjasApiKey) return null;
+
+  try {
+    const url = new URL("https://api.api-ninjas.com/v1/horoscope");
+    url.searchParams.set("zodiac", sign.toLowerCase());
+    const response = await fetch(url, {
+      headers: {
+        "X-Api-Key": apiNinjasApiKey,
+        Accept: "application/json",
+      },
+    });
+    if (!response.ok) return null;
+
+    const data = await response.json();
+    const horoscope = String(data.horoscope || "").trim();
+    if (!horoscope) return null;
+
+    return {
+      sign,
+      source: "api-ninjas",
+      overview: horoscope,
+      love: `Love note for ${sign}: ${horoscope}`,
+      career: `Career note for ${sign}: ${horoscope}`,
+      energy: `Energy note for ${sign}: ${horoscope}`,
+      luckyVibe: "synced with your daily horoscope",
+      date: data.date || null,
+    };
+  } catch (_error) {
+    return null;
+  }
+}
+
+async function fetchMysticalTarotReading(spreadId, spread) {
+  if (!mysticalApiKey) return null;
+
+  try {
+    const request = buildMysticalRequest(spreadId);
+    if (!request) return null;
+
+    const response = await fetch(`https://api.mysticalapi.com/v1${request.path}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${mysticalApiKey}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(request.body),
+    });
+
+    if (!response.ok) return null;
+    const data = await response.json();
+    const cards = mapMysticalCards(spreadId, spread, data);
+    if (!cards.length) return null;
+
+    return {
+      spread: spreadId,
+      displayName: spread.displayName,
+      headline: data.spread?.description || spread.prompt,
+      determination: buildDetermination(spreadId, cards),
+      source: "mystical-api",
+      cards,
+      theme: data.theme || null,
+    };
+  } catch (_error) {
+    return null;
+  }
+}
+
+function buildMysticalRequest(spreadId) {
+  const todaySeed = new Date().toISOString().slice(0, 10);
+  switch (spreadId) {
+    case "DAILY":
+      return {
+        path: "/tarot/daily-card",
+        body: {
+          theme: "general",
+          seed: todaySeed,
+        },
+      };
+    case "PAST_PRESENT_FUTURE":
+      return {
+        path: "/tarot/three-card",
+        body: {
+          spread_type: "past_present_future",
+          theme: "general",
+          seed: todaySeed,
+        },
+      };
+    case "LOVE":
+      return {
+        path: "/tarot/three-card",
+        body: {
+          spread_type: "past_present_future",
+          theme: "love",
+          seed: todaySeed,
+        },
+      };
+    case "CAREER":
+      return {
+        path: "/tarot/three-card",
+        body: {
+          spread_type: "situation_action_outcome",
+          theme: "career",
+          seed: todaySeed,
+        },
+      };
+    case "CELTIC_CROSS":
+      return {
+        path: "/tarot/celtic-cross",
+        body: {
+          theme: "general",
+          seed: todaySeed,
+        },
+      };
+    default:
+      return null;
+  }
+}
+
+function mapMysticalCards(spreadId, spread, data) {
+  if (spreadId === "DAILY" && data.card) {
+    const isReversed = data.card.orientation === "reversed";
+    return [
+      {
+        position: spread.positions[0],
+        name: data.card.name,
+        isReversed,
+        meaning: data.meaning || buildMeaning(data.card.name, isReversed),
+      },
+    ];
+  }
+
+  const incomingCards = Array.isArray(data.cards) ? data.cards : [];
+  return incomingCards.slice(0, spread.cardCount).map((card, index) => {
+    const isReversed = card.orientation === "reversed";
+    return {
+      position: card.position?.name || spread.positions[index] || `Card ${index + 1}`,
+      name: card.name,
+      isReversed,
+      meaning: buildMeaning(card.name, isReversed),
+    };
+  });
 }

@@ -18,6 +18,24 @@ curl -X POST https://api.phunkypixels.com/tarotreader/tarot/spread \
   -d "{\"spread\":\"LOVE\"}"
 ```
 
+## Provider keys
+
+Optional environment variables:
+
+```bash
+export API_NINJAS_API_KEY=your_api_ninjas_key
+export MYSTICAL_API_KEY=your_mystical_key
+```
+
+When present:
+
+- horoscope requests use API Ninjas
+- tarot spread requests use Mystical API for `Daily`, `Past, Present, Future`, `Love`, `Career`, and `Celtic Cross`
+
+When keys are missing or a provider call fails, the backend falls back to the local reading logic.
+
+Note: Tarotap publicly advertises capabilities, but I could not verify a stable public endpoint/auth contract from their public docs page, so it is not wired here yet.
+
 ## Local run
 
 ```bash
@@ -46,3 +64,9 @@ backend.baseUrl=https://api.phunkypixels.com/
 ```
 
 If the backend is unreachable, the app falls back to the current local tarot and horoscope logic.
+
+## Sources
+
+- [API Ninjas Horoscope docs](https://www.api-ninjas.com/api/horoscope)
+- [Mystical Tarot API docs](https://mysticalapi.com/api/tarot.html)
+- [Tarotap API overview](https://tarotap.com/en/tarot-api)
