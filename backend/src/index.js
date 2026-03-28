@@ -290,9 +290,9 @@ async function fetchApiNinjasHoroscope(sign) {
       sign,
       source: "api-ninjas",
       overview: horoscope,
-      love: `Love note for ${sign}: ${horoscope}`,
-      career: `Career note for ${sign}: ${horoscope}`,
-      energy: `Energy note for ${sign}: ${horoscope}`,
+      love: horoscope,
+      career: horoscope,
+      energy: horoscope,
       luckyVibe: "synced with your daily horoscope",
       date: data.date || null,
     };
