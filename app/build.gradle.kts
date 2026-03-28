@@ -29,6 +29,11 @@ android {
             "TAROTAP_API_KEY",
             "\"${localProperties.getProperty("tarotap.apiKey", "")}\""
         )
+        buildConfigField(
+            "String",
+            "BACKEND_BASE_URL",
+            "\"${localProperties.getProperty("backend.baseUrl", "https://api.phunkypixels.com/")}\""
+        )
     }
     buildTypes {
         release {

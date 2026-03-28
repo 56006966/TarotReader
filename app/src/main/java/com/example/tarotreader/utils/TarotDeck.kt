@@ -186,6 +186,9 @@ object TarotDeck {
 
     fun getDeck(): List<TarotCard> = deck.shuffled()
 
+    fun findCardByName(name: String): TarotCard? =
+        deck.firstOrNull { it.name.equals(name, ignoreCase = true) }
+
     private fun buildCard(resourceName: String): TarotCard {
         val title = displayName(resourceName)
         val suit = suitFor(resourceName)

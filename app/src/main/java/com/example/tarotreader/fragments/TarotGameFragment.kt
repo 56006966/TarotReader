@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import com.example.tarotreader.R
 import androidx.navigation.fragment.findNavController
 import com.example.tarotreader.data.TarotSpread
+import com.example.tarotreader.network.BackendClient
 import com.example.tarotreader.utils.TarotSpreadEngine
 
 class TarotGameFragment : Fragment(R.layout.fragment_tarot_game) {
@@ -18,6 +19,7 @@ class TarotGameFragment : Fragment(R.layout.fragment_tarot_game) {
     private lateinit var spreadSpinner: Spinner
     private lateinit var spreadDescription: TextView
     private lateinit var sourceLabel: TextView
+    private lateinit var drawButton: Button
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -49,7 +51,8 @@ class TarotGameFragment : Fragment(R.layout.fragment_tarot_game) {
 
         view.findViewById<TextView>(R.id.tarotHeading).text = getString(R.string.tarot_heading)
         view.findViewById<TextView>(R.id.tarotSubheading).text = getString(R.string.tarot_subheading)
-        view.findViewById<Button>(R.id.btnDrawCard).setOnClickListener {
+        drawButton = view.findViewById(R.id.btnDrawCard)
+        drawButton.setOnClickListener {
             openSpreadReading()
         }
         view.findViewById<Button>(R.id.btnAllCards).setOnClickListener {
@@ -65,18 +68,43 @@ class TarotGameFragment : Fragment(R.layout.fragment_tarot_game) {
 
     private fun openSpreadReading() {
         val spread = TarotSpread.entries[spreadSpinner.selectedItemPosition]
+        drawButton.isEnabled = false
+        Thread {
+            val remoteReading = BackendClient.drawTarotReading(spread)
+            view?.post {
+                if (!isAdded) return@post
+                drawButton.isEnabled = true
+                if (remoteReading != null) {
+                    val action = TarotGameFragmentDirections.actionTarotToSpread(
+                        spreadTitle = remoteReading.spreadTitle,
+                        spreadHeadline = remoteReading.spreadHeadline,
+                        spreadDetermination = remoteReading.spreadDetermination,
+                        spreadSource = remoteReading.spreadSource,
+                        cardPositions = remoteReading.cardPositions,
+                        cardTitles = remoteReading.cardTitles,
+                        cardMeanings = remoteReading.cardMeanings,
+                        cardImages = remoteReading.cardImages
+                    )
+                    findNavController().navigate(action)
+                } else {
+                    openLocalSpreadReading(spread)
+                }
+            }
+        }.start()
+    }
+
+    private fun openLocalSpreadReading(spread: TarotSpread) {
         val reading = TarotSpreadEngine.drawReading(spread)
-        val action = TarotGameFragmentDirections
-            .actionTarotToSpread(
-                spreadTitle = reading.spread.displayName,
-                spreadHeadline = reading.headline,
-                spreadDetermination = reading.determination,
-                spreadSource = reading.source,
-                cardPositions = reading.cards.map { it.position }.toTypedArray(),
-                cardTitles = reading.cards.map { TarotSpreadEngine.titleFor(it) }.toTypedArray(),
-                cardMeanings = reading.cards.map { TarotSpreadEngine.meaningFor(it) }.toTypedArray(),
-                cardImages = reading.cards.map { it.card.imageRes }.toIntArray()
-            )
+        val action = TarotGameFragmentDirections.actionTarotToSpread(
+            spreadTitle = reading.spread.displayName,
+            spreadHeadline = reading.headline,
+            spreadDetermination = reading.determination,
+            spreadSource = reading.source,
+            cardPositions = reading.cards.map { it.position }.toTypedArray(),
+            cardTitles = reading.cards.map { TarotSpreadEngine.titleFor(it) }.toTypedArray(),
+            cardMeanings = reading.cards.map { TarotSpreadEngine.meaningFor(it) }.toTypedArray(),
+            cardImages = reading.cards.map { it.card.imageRes }.toIntArray()
+        )
         findNavController().navigate(action)
     }
 }

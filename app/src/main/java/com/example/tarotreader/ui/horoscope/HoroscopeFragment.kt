@@ -9,6 +9,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.tarotreader.R
+import com.example.tarotreader.network.BackendClient
 import java.text.DateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -52,6 +53,7 @@ class HoroscopeFragment : Fragment(R.layout.fragment_horoscope) {
                 preferences.edit().putString(KEY_LAST_SIGN, selectedSign).apply()
                 (activity as? com.example.tarotreader.MainActivity)?.refreshBottomNavIcons()
                 renderReading(view, selectedSign)
+                refreshFromBackend(view, selectedSign)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) = Unit
@@ -59,16 +61,34 @@ class HoroscopeFragment : Fragment(R.layout.fragment_horoscope) {
 
         spinner.setSelection(initialSelection, false)
         renderReading(view, HoroscopeData.signs[initialSelection])
+        refreshFromBackend(view, HoroscopeData.signs[initialSelection])
     }
 
     private fun renderReading(root: View, sign: String) {
-        val reading = HoroscopeData.buildReading(sign, today.get(Calendar.DAY_OF_YEAR))
+        renderReading(root, HoroscopeData.buildReading(sign, today.get(Calendar.DAY_OF_YEAR)))
+    }
+
+    private fun renderReading(root: View, reading: HoroscopeReading) {
         root.findViewById<TextView>(R.id.overviewBody).text = reading.overview
         root.findViewById<TextView>(R.id.loveBody).text = reading.love
         root.findViewById<TextView>(R.id.careerBody).text = reading.career
         root.findViewById<TextView>(R.id.energyBody).text = reading.energy
         root.findViewById<TextView>(R.id.luckyBody).text =
             reading.luckyVibe.replaceFirstChar { it.titlecase() }
+    }
+
+    private fun refreshFromBackend(root: View, sign: String) {
+        Thread {
+            val remoteReading = BackendClient.fetchHoroscope(sign) ?: return@Thread
+            root.post {
+                if (!isAdded) return@post
+                val spinner = view?.findViewById<Spinner>(R.id.signSpinner) ?: return@post
+                val activeSign = spinner.selectedItem?.toString() ?: return@post
+                if (activeSign == sign) {
+                    renderReading(root, remoteReading)
+                }
+            }
+        }.start()
     }
 
     companion object {
