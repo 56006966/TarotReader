@@ -38,7 +38,7 @@ class TarotSpreadMeaningAdapter(
     }
 
     inner class SpreadResultViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val resultBody: TextView = view.findViewById(R.id.spreadResultBody)
+        val resultBody: TextView = view.findViewById(R.id.spreadDetermination)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
